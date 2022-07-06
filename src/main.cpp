@@ -1,8 +1,10 @@
 #include "Arduino.h"
+#include <WiFiManager.h> 
+#define WEBSERVER_H
 #include "ESPAsyncWebServer.h"
-#include "DNSServer.h"
 
 AsyncWebServer server(80);
+WiFiManager wifiManager;
 
 const int maxRotationFastAdjust = 2000;
 const int ADJUSTMENT_NUMBER = 1000;
@@ -76,12 +78,6 @@ void notFound(AsyncWebServerRequest *request) {
 
 void showWebPage() 
 {
-  WiFi.mode(WIFI_STA);
-  WiFi.begin("", "");
-  if (WiFi.waitForConnectResult() != WL_CONNECTED) {
-    Serial.println("WiFi Failed!");
-    return;
-  }
   Serial.println();
   Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
@@ -118,6 +114,9 @@ void showWebPage()
 
 void setup() {
   //Serial.begin(115200);
+  wifiManager.autoConnect("HollowClock");
+  wifiManager.setHostname("HolloClock");
+
 
   pinMode(port[0], OUTPUT);
   pinMode(port[1], OUTPUT);
